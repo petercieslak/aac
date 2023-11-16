@@ -9,5 +9,12 @@
 #include <list>
 
 int main(int argc, char* argv[]) {
+    MultigraphReader multigraphReader = MultigraphReader();
+    std::list<Multigraph> multigraphs = multigraphReader.readMultigraphsFromFile("./multigraphs");
+
+    for (auto & multigraph : multigraphs){
+        multigraph.print();
+    }
+
     return EXIT_SUCCESS;
 }

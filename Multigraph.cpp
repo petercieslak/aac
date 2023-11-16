@@ -53,11 +53,11 @@ Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph
             // Bound to begin checking - if there are no outgoing edges we are not checking
             if (multigraph1.adjMatrix[i][j] >= 1)
                 for (int k = 0; k < multigraph2.verticesNo; k++){
-                    // Isomorphism condition - check whether the number of outgoing edges is equal, else graphs are not
-                    // isomorphic
-                    if (multigraph1.adjMatrix[i][j] == multigraph2.adjMatrix[j][k])
+                    // Isomorphism condition (altered for multigraphs) - check whether there are any outgoing edges from checked vertex in second graph,
+                    // if so take minimum and store it in association graph
+                    if (multigraph2.adjMatrix[j][k] >= 1)
                         // Store the edges and their count
-                        associationMultigraph.adjMatrix[j][k] = multigraph1.adjMatrix[i][j];
+                        associationMultigraph.adjMatrix[j][k] = std::min(multigraph1.adjMatrix[i][j], multigraph2.adjMatrix[j][k]);
                 }
         }
     }
