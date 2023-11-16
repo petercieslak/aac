@@ -1,0 +1,26 @@
+//
+// Created by Piotr Cieślak at 14/11/2023
+//
+
+#ifndef AAC_MULTIGRAPHREAD_H
+#define AAC_MULTIGRAPHREAD_H
+
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <list>
+#include "Multigraph.h"
+
+class MultigraphReader {
+    std::ifstream multigraphFile;
+
+    public:
+        // Constructor
+        explicit MultigraphReader();
+
+        // Method for reading graphs from file
+        
+        std::list<Multigraph> readMultigraphsFromFile(std::string filePath);
+};
+
+#endif //AAC_MULTIGRAPHREAD_H

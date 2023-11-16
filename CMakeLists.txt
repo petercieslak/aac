@@ -8,4 +8,5 @@ include_directories(.)
 add_executable(aac
         main.cpp
         main.h
-        Multigraph.cpp)
+        Multigraph.cpp
+        MultigraphReader.cpp)

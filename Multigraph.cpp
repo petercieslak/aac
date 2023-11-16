@@ -2,34 +2,7 @@
 // Created by Szymon Markiewicz on 13/11/2023.
 //
 
-#include <cstring>
-#include <fstream>
-#include <string>
 #include "Multigraph.h"
-
-class Multigraph {
-    // Number of vertices
-    int verticesNo;
-
-    // Adjacency matrix of a graph
-    int **adjMatrix;
-
-    // File from which to generate the graph
-    std::ifstream multigraphFile;
-
-    // Constructor
-    explicit Multigraph(int _verticesNo);
-
-    // Methods
-    int getSize(); // Get basic multigraph size
-
-    public:
-        Multigraph generateGraphFromFile(std::string _filePath);
-
-        static Multigraph createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2);
-
-
-};
 
 /*
  * Initialize empty adjacency matrix for a graph.
@@ -46,22 +19,6 @@ Multigraph::Multigraph(int _verticesNo)
         adjMatrix[i] = new int[_verticesNo];
         memset(adjMatrix[i], 0, _verticesNo * sizeof(int));
     }
-}
-
-/*
- * Create an adjacency graph by reading a local file.
- *
- * Parameters:
- *      _filePath - path to the file containing graph data
- * */
-Multigraph Multigraph::generateGraphFromFile(std::string _filePath) {
-    multigraphFile.open(_filePath);
-
-//    ...
-//    Czytanie grafu here, zapisujemy do verticesNo i adjMatrix
-//    ...
-
-    return Multigraph(0);
 }
 
 /*
@@ -106,6 +63,20 @@ Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph
     }
 
     return associationMultigraph;
+}
+
+int Multigraph::setAdjMatrixEntry(int rowNum, int colNum, int value) {
+    adjMatrix[rowNum][colNum] = value;
+    // std::cout << "row: " << rowNum << " col: " << colNum << " val: " << value << std::endl;
+    return 1;
+}
+
+void Multigraph::print() {
+    for(int i = 0; i < this->verticesNo; i++) {
+        for(int j = 0; j < this->verticesNo; j++) {
+            std::cout << "row: " << i << " col: " << j << " val: " << this->adjMatrix[i][j] << std::endl;
+        }
+    }
 }
 
 
