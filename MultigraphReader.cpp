@@ -1,6 +1,3 @@
-//
-// Created by Piotr Cieślak at 14/11/2023
-//
 
 #include "MultigraphReader.h"
 

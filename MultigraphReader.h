@@ -1,7 +1,3 @@
-//
-// Created by Piotr Cieślak at 14/11/2023
-//
-
 #ifndef AAC_MULTIGRAPHREAD_H
 #define AAC_MULTIGRAPHREAD_H
 
