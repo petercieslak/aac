@@ -63,19 +63,23 @@ int Multigraph::getEdgeWeight(vector<int> vertices) {
  * */
 Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2) {
     // Vertices number of new multigraph will be the multiplication of |V1| and |V2|
-    Multigraph associationMultigraph = Multigraph(multigraph1.verticesNo * multigraph2.verticesNo);
+    int V1 = multigraph1.verticesNo;
+    int V2 = multigraph2.verticesNo;
 
-    for (int i = 0; i < multigraph1.verticesNo; i++) {
-        for (int j = 0; j < multigraph1.verticesNo; j++) {
-            // Bound to begin checking - if there are no outgoing edges we are not checking
-            if (multigraph1.adjMatrix[i][j] >= 1)
-                for (int k = 0; k < multigraph2.verticesNo; k++){
-                    // Isomorphism condition - check whether the number of outgoing edges is equal, else graphs are not
-                    // isomorphic
-                    if (multigraph1.adjMatrix[i][j] == multigraph2.adjMatrix[j][k])
-                        // Store the edges and their count
-                        associationMultigraph.adjMatrix[j][k] = multigraph1.adjMatrix[i][j];
+    Multigraph associationMultigraph = Multigraph(V1 * V2);
+
+    for (int i = 0; i < V1; i++) {
+        for (int j = 0; j < V2; j++) {
+            for (int x = 0; x < V1; x++) {
+                if (multigraph1.adjMatrix[i][x] >= 1){
+                    for (int y = 0; y < V2; y++){
+                        if (multigraph2.adjMatrix[j][y] >= 1){
+                            associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
+                                    std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                        }
+                    }
                 }
+            }
         }
     }
 
@@ -150,6 +154,24 @@ void Multigraph::printClique(){
         }
         cout<<endl;
     }
+    cout << endl;
+}
+
+void Multigraph::printAdjacencyGraph(){
+    cout<<"Adjacency graph:" <<endl;
+    cout << "  ";
+    for(int i=0; i<verticesNo; i++) {
+        cout << i << " ";
+    }
+    cout << endl;
+    for (int i=0; i<verticesNo; i++){
+        cout << i << " ";
+        for (int j=0; j<verticesNo; j++) {
+            cout << adjMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
 
 int Multigraph::setAdjMatrixEntry(int rowNum, int colNum, int value) {

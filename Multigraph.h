@@ -48,6 +48,8 @@ class Multigraph {
 
         void printClique();
 
+        void printAdjacencyGraph();
+
         //set entry of the adjacency matrix
 
         int setAdjMatrixEntry(int rowNum, int colNum, int value);
