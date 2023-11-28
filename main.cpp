@@ -1,6 +1,7 @@
 #include "main.h"
 #include "Multigraph.cpp"
 #include "MultigraphReader.cpp"
+#include "MultigraphMetricService.cpp"
 #include <cstdlib>
 #include <list>
 #include <iostream> // Include iostream for console output
@@ -40,6 +41,16 @@ int main() {
     associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
     cout << "Computing max common subgraph..." << endl;
     associationGraph.printClique();
+    // for (auto & multigraph : multigraphs){
+    //     multigraph.print();
+    // }
+
+    MultigraphMetricService mms = MultigraphMetricService();
+
+    Multigraph multigraph1 = multigraphs.front();
+    multigraphs.pop_front();
+    Multigraph multigraph2 = multigraphs.front();
+    mms.calculateGraphEditDistance(multigraph1, multigraph2);
 
     return EXIT_SUCCESS;
 }

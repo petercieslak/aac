@@ -58,6 +58,12 @@ class Multigraph {
 
         void print();
 
+        int getVerticesNo();
+
+        void addEmptyVertices(int amount);
+
+        int getVertex(int colIndex, int rowIndex);
+
 
 };
 
