@@ -7,7 +7,7 @@
 #include <iostream> // Include iostream for console output
 
 int main() {
-    std::string filePath = "C:/Users/Bartek/Desktop/inputGrafExample.txt"; // Hardcoded file path
+    std::string filePath = "./multigraphs"; // Hardcoded file path
 
     MultigraphReader reader; // Create an instance of MultigraphReader
 
@@ -18,10 +18,10 @@ int main() {
     for (Multigraph multigraph : multigraphs) {
         // Implement a function in Multigraph class to print the graph details
         multigraph.print(); // Assuming a function called print() exists in Multigraph class
-        vector<int> startingCLique;
+        vector<int> startingClique;
 
 
-        multigraph.maximumCliqueExact(startingCLique, multigraph.verticesInGraph());
+        multigraph.maximumCliqueExact(startingClique, multigraph.verticesInGraph());
         multigraph.printClique();
 
         multigraphsVectorList.push_back(multigraph);
@@ -41,9 +41,8 @@ int main() {
     associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
     cout << "Computing max common subgraph..." << endl;
     associationGraph.printClique();
-    // for (auto & multigraph : multigraphs){
-    //     multigraph.print();
-    // }
+
+    cout << "----------METRIC-----------" << endl;
 
     MultigraphMetricService mms = MultigraphMetricService();
 
