@@ -166,5 +166,40 @@ void Multigraph::print() {
     }
 }
 
+int Multigraph::getVerticesNo() {
+    return this->verticesNo;
+}
+
+void Multigraph::addEmptyVertices(int amount) {
+    int **resizedAdjMatrix;
+    int newSize = amount + verticesNo;
+    resizedAdjMatrix = new int*[newSize];
+
+    for (int i = 0; i < newSize; i++) {
+        resizedAdjMatrix[i] = new int[newSize];
+        memset(resizedAdjMatrix[i], 0, newSize * sizeof(int));
+    }
+
+    for (int i = 0; i < verticesNo; i++) {
+        for(int j = 0; j < verticesNo; j++) {
+            resizedAdjMatrix[i][j] = adjMatrix[i][j];
+        }
+    }
+
+    for (int i = verticesNo; i < newSize; i++) {
+        for (int j = 0; j < newSize; j++) {
+            resizedAdjMatrix[i][j] = 0;
+            resizedAdjMatrix[j][i] = 0;
+        }
+    }
+
+    this->adjMatrix = resizedAdjMatrix;
+    this->verticesNo = newSize;
+}
+
+int Multigraph::getVertex(int colIndex, int rowIndex) {
+    return this->adjMatrix[colIndex][rowIndex];
+}
+
 
 
