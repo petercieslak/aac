@@ -3,6 +3,7 @@
 #include "MultigraphReader.cpp"
 #include "MultigraphMetricService.cpp"
 #include <cstdlib>
+#include <numeric>
 #include <list>
 #include <iostream> // Include iostream for console output
 
@@ -19,21 +20,28 @@ int main() {
         multigraph.print(); // Assuming a function called print() exists in Multigraph class
         vector<int> startingCLique;
 
+         multigraph.maximumCliqueExact(startingCLique, multigraph.verticesInGraph());
 
-
-        multigraph.maximumCliqueExact(startingCLique, multigraph.verticesInGraph());
+        multigraph.maximumCliqueApproximation(multigraph);
         multigraph.printClique();
+        
     }
-    // for (auto & multigraph : multigraphs){
-    //     multigraph.print();
+
+    
+
+
+   
     // }
+    // // for (auto & multigraph : multigraphs){
+    // //     multigraph.print();
+    // // }
 
-    MultigraphMetricService mms = MultigraphMetricService();
+    // MultigraphMetricService mms = MultigraphMetricService();
 
-    Multigraph multigraph1 = multigraphs.front();
-    multigraphs.pop_front();
-    Multigraph multigraph2 = multigraphs.front();
-    mms.calculateGraphEditDistance(multigraph1, multigraph2);
+    // Multigraph multigraph1 = multigraphs.front();
+    // multigraphs.pop_front();
+    // Multigraph multigraph2 = multigraphs.front();
+    // mms.calculateGraphEditDistance(multigraph1, multigraph2);
 
     return EXIT_SUCCESS;
 }
