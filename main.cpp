@@ -3,7 +3,6 @@
 #include "MultigraphReader.cpp"
 #include "MultigraphMetricService.cpp"
 #include <cstdlib>
-#include <numeric>
 #include <list>
 #include <iostream> // Include iostream for console output
 
@@ -15,6 +14,9 @@ int main() {
     std::list<Multigraph> multigraphs = reader.readMultigraphsFromFile(filePath); // Read multigraphs from file
 
     std::vector<Multigraph> multigraphsVectorList;
+
+    cout << "----MAXIMUM CLIQUE + APPROXIMATION----" << endl;
+
     // Print the multigraphs to the console
     for (Multigraph multigraph : multigraphs) {
         // Implement a function in Multigraph class to print the graph details

@@ -10,7 +10,7 @@
  *      _verticesNo - number of vertices in a graph
  * */
 
- using namespace std;
+using namespace std;
 
 Multigraph::Multigraph(int _verticesNo)
 {
