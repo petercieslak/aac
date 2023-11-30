@@ -9,6 +9,9 @@
  * Parameters:
  *      _verticesNo - number of vertices in a graph
  * */
+
+ using namespace std;
+
 Multigraph::Multigraph(int _verticesNo)
 {
     verticesNo = _verticesNo;
@@ -117,6 +120,49 @@ void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjac
     }
 }
 
+void Multigraph::maximumCliqueApproximation(Multigraph multigraph) {
+    vector<int> verticesOfMultigraph(multigraph.getVerticesNo());
+    iota(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), 0);
+
+    sort(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&](int a, int b) {
+        return getVertexDegree(a) < getVertexDegree(b);
+    });
+
+    vector<int> maxClique;
+    while(verticesOfMultigraph.size() != 0){
+        vector<int> currentClique;
+
+        for(int v: verticesOfMultigraph){
+            if(isSubset(currentClique, findNeighbours(v))) {
+                currentClique.push_back(v);
+            }
+        }
+
+        if (currentClique.size() > maxClique.size() || ((currentClique.size() == maxClique.size()) && (getEdgeWeight(currentClique) > getEdgeWeight(maxClique)))){
+            maxClique = currentClique;
+        }
+
+        verticesOfMultigraph.erase(std::remove_if(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&](int x) {
+            return std::find(currentClique.begin(), currentClique.end(), x) != currentClique.end();
+        }), verticesOfMultigraph.end());
+    }
+
+    maxCliqueApproximation = maxClique;
+}
+
+bool Multigraph::isSubset(vector<int> potentialSubset, vector<int> fullSet) {
+    for (int element : potentialSubset) {
+        if (find(fullSet.begin(), fullSet.end(), element) == fullSet.end()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int Multigraph::getVertexDegree(int vertex) {
+    return findNeighbours(vertex).size();
+}
+
 vector<int> Multigraph::findNeighbours(int vertex) {
     vector<int> neighbours;
 
@@ -150,6 +196,24 @@ void Multigraph::printClique(){
     for(int v1: maxClique){
         cout << v1 << " ";
         for (int v2: maxClique){
+            cout << adjMatrix[v1][v2] << " ";
+        }
+        cout<<endl;
+    }
+
+    cout << "-------------------------------------" << endl;
+
+    sort(maxCliqueApproximation.begin(), maxCliqueApproximation.end());
+    cout<<"Maximum clique aprox:" <<endl;
+    cout << "  ";
+    for(int v1: maxCliqueApproximation) {
+        cout<<v1<<" ";
+    }
+    cout << endl;
+
+    for(int v1: maxCliqueApproximation){
+        cout << v1 << " ";
+        for (int v2: maxCliqueApproximation){
             cout << adjMatrix[v1][v2] << " ";
         }
         cout<<endl;

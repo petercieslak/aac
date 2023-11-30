@@ -9,6 +9,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm> 
+#include <numeric>
 #ifndef AAC_MULTIGRAPH_H
 #define AAC_MULTIGRAPH_H
 
@@ -30,6 +31,8 @@ class Multigraph {
 
         vector<int> maxClique;
 
+        vector<int> maxCliqueApproximation;
+
         // Constructor
         explicit Multigraph(int _verticesNo);
 
@@ -40,6 +43,12 @@ class Multigraph {
         // find maximum clique for a graph - exact solution, exponential time
         void maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices);
 
+        // find maximum clique for a graph - approximation, polynomial time
+        void maximumCliqueApproximation(Multigraph multigraph);
+
+        bool isSubset(vector<int> potentialSubset, vector<int> fullSet);
+
+        int getVertexDegree(int vertex);
         // find neighbours of some vertex in the graph
         vector<int> findNeighbours(int vertex);
         

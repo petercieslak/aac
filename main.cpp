@@ -3,6 +3,7 @@
 #include "MultigraphReader.cpp"
 #include "MultigraphMetricService.cpp"
 #include <cstdlib>
+#include <numeric>
 #include <list>
 #include <iostream> // Include iostream for console output
 
@@ -20,8 +21,8 @@ int main() {
         multigraph.print(); // Assuming a function called print() exists in Multigraph class
         vector<int> startingClique;
 
-
         multigraph.maximumCliqueExact(startingClique, multigraph.verticesInGraph());
+        multigraph.maximumCliqueApproximation(multigraph);
         multigraph.printClique();
 
         multigraphsVectorList.push_back(multigraph);
