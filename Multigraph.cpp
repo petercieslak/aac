@@ -1,7 +1,3 @@
-//
-// Created by Szymon Markiewicz on 13/11/2023.
-//
-
 #include "Multigraph.h"
 /*
  * Initialize empty adjacency matrix for a graph.
@@ -37,6 +33,17 @@ int Multigraph::getSize() {
     return verticesNo + noOfEdges;
 }
 
+int Multigraph::getSubsetSize(const vector<int>& vertices) {
+    int noOfEdges = 0;
+    for (auto i : vertices) {
+        for (auto j: vertices) {
+            noOfEdges += adjMatrix[i][j];
+        }
+    }
+
+    return verticesNo + noOfEdges;
+}
+
 /*
  * Get weight of edges for given subgraph 
  * */
@@ -64,7 +71,7 @@ int Multigraph::getEdgeWeight(vector<int> vertices) {
  *      multigraph1 - first directed multigraph
  *      multigraph2 - second directed multigraph
  * */
-Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2) {
+Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, const Multigraph& multigraph2) {
     // Vertices number of new multigraph will be the multiplication of |V1| and |V2|
     int V1 = multigraph1.verticesNo;
     int V2 = multigraph2.verticesNo;
@@ -89,11 +96,23 @@ Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph
     return associationMultigraph;
 }
 
+Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
+    Multigraph associationGraph = Multigraph::createAssociationGraph(multigraph1, multigraph2);
+
+    vector<int> startingClique;
+    if (exact)
+        associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
+    else
+        associationGraph.maximumCliqueApproximation();
+
+    return associationGraph;
+}
+
 void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices) {
-    
-    if(currentClique.size() > maxClique.size() || ((currentClique.size() == maxClique.size()) && (getEdgeWeight(currentClique) > getEdgeWeight(maxClique)))) {
+    if(getSubsetSize(currentClique) > getSubsetSize(maxClique)) {
         maxClique = currentClique;
-    } 
+    }
+
     if((currentClique.size() + adjacentVertices.size()) >= maxClique.size()) {
         for(int v:adjacentVertices) {
             // delete v from adjacentVertices
@@ -120,11 +139,11 @@ void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjac
     }
 }
 
-void Multigraph::maximumCliqueApproximation(Multigraph multigraph) {
-    vector<int> verticesOfMultigraph(multigraph.getVerticesNo());
+void Multigraph::maximumCliqueApproximation() {
+    vector<int> verticesOfMultigraph(this->getVerticesNo());
     iota(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), 0);
 
-    sort(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&](int a, int b) {
+    sort(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [this](int a, int b) {
         return getVertexDegree(a) < getVertexDegree(b);
     });
 
@@ -142,7 +161,7 @@ void Multigraph::maximumCliqueApproximation(Multigraph multigraph) {
             maxClique = currentClique;
         }
 
-        verticesOfMultigraph.erase(std::remove_if(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&](int x) {
+        verticesOfMultigraph.erase(std::remove_if(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&currentClique](int x) {
             return std::find(currentClique.begin(), currentClique.end(), x) != currentClique.end();
         }), verticesOfMultigraph.end());
     }

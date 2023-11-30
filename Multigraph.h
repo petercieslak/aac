@@ -25,6 +25,8 @@ class Multigraph {
     // Methods
     int getSize(); // Get basic multigraph size
 
+    int getSubsetSize(const vector<int>& vertices);
+
     int getEdgeWeight(vector<int> vertices);
 
     public:
@@ -38,13 +40,16 @@ class Multigraph {
 
         // Multigraph generateGraphFromFile(std::string _filePath);
 
-        static Multigraph createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2);
+        static Multigraph createAssociationGraph(const Multigraph& multigraph1, const Multigraph& multigraph2);
 
         // find maximum clique for a graph - exact solution, exponential time
         void maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices);
 
         // find maximum clique for a graph - approximation, polynomial time
-        void maximumCliqueApproximation(Multigraph multigraph);
+        void maximumCliqueApproximation();
+
+        // find maximum common subgraph of two graphs
+        static Multigraph maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2);
 
         bool isSubset(vector<int> potentialSubset, vector<int> fullSet);
 
