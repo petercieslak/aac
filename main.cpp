@@ -9,36 +9,35 @@
 using namespace std::chrono;
 
 int main() {
-    std::string filePath = "./multigraphs"; // Hardcoded file path
+    std::string filePath = "./multigraphs6x6"; // Hardcoded file path
 
     MultigraphReader reader; // Create an instance of MultigraphReader
 
-    std::list<Multigraph> multigraphs = reader.readMultigraphsFromFile(filePath); // Read multigraphs from file
+    std::list<Multigraph> multigraphs = reader.readMultigraphsFromFile(filePath); // Read multigraphs3x3 from file
 
     std::vector<Multigraph> multigraphsVectorList;
 
     cout << "----MAXIMUM CLIQUE + APPROXIMATION----" << endl;
 
-    // Print the multigraphs to the console
+    // Print the multigraphs3x3 to the console
     for (Multigraph multigraph : multigraphs) {
         // Implement a function in Multigraph class to print the graph details
-        multigraph.print(); // Assuming a function called print() exists in Multigraph class
         vector<int> startingClique;
 
         auto start = high_resolution_clock::now();
         multigraph.maximumCliqueExact(startingClique, multigraph.verticesInGraph());
         auto stop = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(stop - start);
+        auto duration = duration_cast<microseconds>(stop - start);
         cout << "[Maximum Clique Exact Algorithm] Time taken: "
-            << duration.count() << " milliseconds"
+            << duration.count() << " microseconds"
             << endl;
 
         start = high_resolution_clock::now();
         multigraph.maximumCliqueApproximation();
         stop = high_resolution_clock::now();
-        duration = duration_cast<milliseconds>(stop - start);
+        duration = duration_cast<microseconds>(stop - start);
         cout << "[Maximum Clique Approximation Algorithm] Time taken: "
-             << duration.count() << " milliseconds"
+             << duration.count() << " microseconds"
              << endl;
 
         multigraph.printClique();
@@ -54,9 +53,9 @@ int main() {
     auto start = high_resolution_clock::now();
     Multigraph associationGraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(stop - start);
+    auto duration = duration_cast<microseconds>(stop - start);
     cout << "[Maximum Common Subgraph Exact Algorithm] Time taken: "
-         << duration.count() << " milliseconds"
+         << duration.count() << " microseconds"
          << endl;
 
     cout << "Association graph..." << endl;
@@ -75,9 +74,9 @@ int main() {
     Multigraph multigraph2 = multigraphs.front();
     mms.calculateGraphEditDistance(multigraph1, multigraph2);
     stop = high_resolution_clock::now();
-    duration = duration_cast<milliseconds>(stop - start);
+    duration = duration_cast<microseconds>(stop - start);
     cout << "[Graph Edit Distance Algorithm] Time taken: "
-         << duration.count() << " milliseconds"
+         << duration.count() << " microseconds"
          << endl;
 
     return EXIT_SUCCESS;
