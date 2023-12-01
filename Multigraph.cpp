@@ -64,7 +64,7 @@ int Multigraph::getEdgeWeight(vector<int> vertices) {
 }
 
 /*
- * Function to create association graph of two directed multigraphs. We can use this to obtain the maximum common
+ * Function to create association graph of two directed multigraphs3x3. We can use this to obtain the maximum common
  * subgraph of two graphs - it will be the maximum clique of this association graph (Durand-Pasari algorithm)
  *
  * Parameters:

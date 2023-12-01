@@ -9,7 +9,7 @@
 using namespace std::chrono;
 
 int main() {
-    std::string filePath = "./multigraphs6x6"; // Hardcoded file path
+    std::string filePath = "./multigraphs/graph25.txt"; // Hardcoded file path
 
     MultigraphReader reader; // Create an instance of MultigraphReader
 
@@ -28,7 +28,7 @@ int main() {
         multigraph.maximumCliqueExact(startingClique, multigraph.verticesInGraph());
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(stop - start);
-        cout << "[Maximum Clique Exact Algorithm] Time taken: "
+        cout << "[Maximum Clique - Exact Algorithm] Time taken: "
             << duration.count() << " microseconds"
             << endl;
 
@@ -36,7 +36,7 @@ int main() {
         multigraph.maximumCliqueApproximation();
         stop = high_resolution_clock::now();
         duration = duration_cast<microseconds>(stop - start);
-        cout << "[Maximum Clique Approximation Algorithm] Time taken: "
+        cout << "[Maximum Clique - Approximation Algorithm] Time taken: "
              << duration.count() << " microseconds"
              << endl;
 
@@ -50,11 +50,12 @@ int main() {
     multigraphsVectorList[0].printAdjacencyGraph();
     multigraphsVectorList[1].printAdjacencyGraph();
 
+    cout << "Exact algo" << endl;
     auto start = high_resolution_clock::now();
     Multigraph associationGraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << "[Maximum Common Subgraph Exact Algorithm] Time taken: "
+    cout << "[Maximum Common Subgraph - Exact Algorithm] Time taken: "
          << duration.count() << " microseconds"
          << endl;
 
@@ -63,6 +64,21 @@ int main() {
 
     cout << "Max common subgraph..." << endl;
     associationGraph.printClique();
+
+    cout << "Approximate algo" << endl;
+    start = high_resolution_clock::now();
+    Multigraph associationGraphApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
+    stop = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(stop - start);
+    cout << "[Maximum Common Subgraph - Approx Algorithm] Time taken: "
+         << duration.count() << " microseconds"
+         << endl;
+
+    cout << "Association graph..." << endl;
+    associationGraphApprox.printAdjacencyGraph();
+
+    cout << "Max common subgraph..." << endl;
+    associationGraphApprox.printClique();
 
     cout << "----------METRIC-----------" << endl;
 
