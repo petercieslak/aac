@@ -9,6 +9,7 @@ Ensure you have the following installed:
 
 - [Visual Studio Code](https://code.visualstudio.com/)
 - C/C++ extension for Visual Studio Code
+- GCC (GNU Compiler Collection) 
 
 ### Execution Steps
 
