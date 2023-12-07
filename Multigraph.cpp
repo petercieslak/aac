@@ -1,15 +1,13 @@
-//
-// Created by Szymon Markiewicz on 13/11/2023.
-//
-
 #include "Multigraph.h"
-
 /*
  * Initialize empty adjacency matrix for a graph.
  *
  * Parameters:
  *      _verticesNo - number of vertices in a graph
  * */
+
+using namespace std;
+
 Multigraph::Multigraph(int _verticesNo)
 {
     verticesNo = _verticesNo;
@@ -26,7 +24,6 @@ Multigraph::Multigraph(int _verticesNo)
  * */
 int Multigraph::getSize() {
     int noOfEdges = 0;
-
     for (int i = 0; i < verticesNo; i++) {
         for (int j = 0; j < verticesNo; j++) {
             noOfEdges += adjMatrix[i][j];
@@ -36,33 +33,228 @@ int Multigraph::getSize() {
     return verticesNo + noOfEdges;
 }
 
+int Multigraph::getSubsetSize(const vector<int>& vertices) {
+    int noOfEdges = 0;
+    for (auto i : vertices) {
+        for (auto j: vertices) {
+            noOfEdges += adjMatrix[i][j];
+        }
+    }
+
+    return verticesNo + noOfEdges;
+}
+
 /*
- * Function to create association graph of two directed multigraphs. We can use this to obtain the maximum common
+ * Get weight of edges for given subgraph 
+ * */
+int Multigraph::getEdgeWeight(vector<int> vertices) {
+    int result = 0;
+    
+    for (int i = 0; i < verticesNo; i++) {
+        for (int j = 0; j < verticesNo; j++) {
+            for(int v:vertices) {
+                if((v == i || v == j) && i != j) {
+                    result += adjMatrix[i][j];
+                }
+            }
+            
+        }
+    }
+    return result;
+}
+
+/*
+ * Function to create association graph of two directed multigraphs3x3. We can use this to obtain the maximum common
  * subgraph of two graphs - it will be the maximum clique of this association graph (Durand-Pasari algorithm)
  *
  * Parameters:
  *      multigraph1 - first directed multigraph
  *      multigraph2 - second directed multigraph
  * */
-Multigraph Multigraph::createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2) {
+Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, const Multigraph& multigraph2) {
     // Vertices number of new multigraph will be the multiplication of |V1| and |V2|
-    Multigraph associationMultigraph = Multigraph(multigraph1.verticesNo * multigraph2.verticesNo);
+    int V1 = multigraph1.verticesNo;
+    int V2 = multigraph2.verticesNo;
 
-    for (int i = 0; i < multigraph1.verticesNo; i++) {
-        for (int j = 0; j < multigraph1.verticesNo; j++) {
-            // Bound to begin checking - if there are no outgoing edges we are not checking
-            if (multigraph1.adjMatrix[i][j] >= 1)
-                for (int k = 0; k < multigraph2.verticesNo; k++){
-                    // Isomorphism condition (altered for multigraphs) - check whether there are any outgoing edges from checked vertex in second graph,
-                    // if so take minimum and store it in association graph
-                    if (multigraph2.adjMatrix[j][k] >= 1)
-                        // Store the edges and their count
-                        associationMultigraph.adjMatrix[j][k] = std::min(multigraph1.adjMatrix[i][j], multigraph2.adjMatrix[j][k]);
+    Multigraph associationMultigraph = Multigraph(V1 * V2);
+
+    for (int i = 0; i < V1; i++) {
+        for (int j = 0; j < V2; j++) {
+            for (int x = 0; x < V1; x++) {
+                if (multigraph1.adjMatrix[i][x] >= 1){
+                    for (int y = 0; y < V2; y++){
+                        if (multigraph2.adjMatrix[j][y] >= 1){
+                            associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
+                                    std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                        }
+                    }
                 }
+            }
         }
     }
 
     return associationMultigraph;
+}
+
+Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
+    Multigraph associationGraph = Multigraph::createAssociationGraph(multigraph1, multigraph2);
+
+    vector<int> startingClique;
+    if (exact)
+        associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
+    else
+        associationGraph.maximumCliqueApproximation();
+
+    return associationGraph;
+}
+
+void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices) {
+    if(getSubsetSize(currentClique) > getSubsetSize(maxClique)) {
+        maxClique = currentClique;
+    }
+
+    if((currentClique.size() + adjacentVertices.size()) >= maxClique.size()) {
+        for(int v:adjacentVertices) {
+            // delete v from adjacentVertices
+            auto it = find(adjacentVertices.begin(), adjacentVertices.end(), v);
+            if (it != adjacentVertices.end()) {
+                adjacentVertices.erase(it);
+            }
+
+            // add v to current clique
+            vector<int> tempCurrentClique = currentClique;
+            tempCurrentClique.push_back(v);
+    
+            // intersection between adjacent vertices and neighbours of v
+            vector<int> vNeighbours = findNeighbours(v);
+            vector<int> tempAdjacentVertices;
+            sort(adjacentVertices.begin(), adjacentVertices.end());
+            sort(vNeighbours.begin(), vNeighbours.end());
+            set_intersection(adjacentVertices.begin(), adjacentVertices.end(), vNeighbours.begin(), vNeighbours.end(), back_inserter(tempAdjacentVertices));
+
+            // recurrence
+            maximumCliqueExact(tempCurrentClique, tempAdjacentVertices);
+
+        }
+    }
+}
+
+void Multigraph::maximumCliqueApproximation() {
+    vector<int> verticesOfMultigraph(this->getVerticesNo());
+    iota(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), 0);
+
+    sort(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [this](int a, int b) {
+        return getVertexDegree(a) < getVertexDegree(b);
+    });
+
+    vector<int> maxClique;
+    while(verticesOfMultigraph.size() != 0){
+        vector<int> currentClique;
+
+        for(int v: verticesOfMultigraph){
+            if(isSubset(currentClique, findNeighbours(v))) {
+                currentClique.push_back(v);
+            }
+        }
+
+        if (currentClique.size() > maxClique.size() || ((currentClique.size() == maxClique.size()) && (getEdgeWeight(currentClique) > getEdgeWeight(maxClique)))){
+            maxClique = currentClique;
+        }
+
+        verticesOfMultigraph.erase(std::remove_if(verticesOfMultigraph.begin(), verticesOfMultigraph.end(), [&currentClique](int x) {
+            return std::find(currentClique.begin(), currentClique.end(), x) != currentClique.end();
+        }), verticesOfMultigraph.end());
+    }
+
+    maxCliqueApproximation = maxClique;
+}
+
+bool Multigraph::isSubset(vector<int> potentialSubset, vector<int> fullSet) {
+    for (int element : potentialSubset) {
+        if (find(fullSet.begin(), fullSet.end(), element) == fullSet.end()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int Multigraph::getVertexDegree(int vertex) {
+    return findNeighbours(vertex).size();
+}
+
+vector<int> Multigraph::findNeighbours(int vertex) {
+    vector<int> neighbours;
+
+    for(int i=0; i<verticesNo; i++) {
+        // for directed graph neighbour needs to have connection in both ways
+        if(vertex != i && adjMatrix[vertex][i] != 0 && adjMatrix[i][vertex] != 0) {
+            neighbours.push_back(i);
+        }
+    }
+
+    return neighbours;
+}
+
+vector<int> Multigraph::verticesInGraph() {
+    vector<int> result;
+    for(int i=0; i<verticesNo; i++) {
+        result.push_back(i);
+    }
+    return result;
+}
+
+void Multigraph::printClique(){
+    sort(maxClique.begin(), maxClique.end()); 
+    cout<<"Maximum clique:" <<endl;
+    cout << "  ";
+    for(int v1: maxClique) {
+        cout<<v1<<" ";
+    }
+    cout << endl;
+
+    for(int v1: maxClique){
+        cout << v1 << " ";
+        for (int v2: maxClique){
+            cout << adjMatrix[v1][v2] << " ";
+        }
+        cout<<endl;
+    }
+
+    cout << "-------------------------------------" << endl;
+
+    sort(maxCliqueApproximation.begin(), maxCliqueApproximation.end());
+    cout<<"Maximum clique aprox:" <<endl;
+    cout << "  ";
+    for(int v1: maxCliqueApproximation) {
+        cout<<v1<<" ";
+    }
+    cout << endl;
+
+    for(int v1: maxCliqueApproximation){
+        cout << v1 << " ";
+        for (int v2: maxCliqueApproximation){
+            cout << adjMatrix[v1][v2] << " ";
+        }
+        cout<<endl;
+    }
+    cout << endl;
+}
+
+void Multigraph::printAdjacencyGraph(){
+    cout<<"Adjacency graph:" <<endl;
+    cout << "  ";
+    for(int i=0; i<verticesNo; i++) {
+        cout << i << " ";
+    }
+    cout << endl;
+    for (int i=0; i<verticesNo; i++){
+        cout << i << " ";
+        for (int j=0; j<verticesNo; j++) {
+            cout << adjMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
 
 int Multigraph::setAdjMatrixEntry(int rowNum, int colNum, int value) {

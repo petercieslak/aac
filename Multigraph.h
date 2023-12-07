@@ -7,9 +7,13 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-
+#include <vector>
+#include <algorithm> 
+#include <numeric>
 #ifndef AAC_MULTIGRAPH_H
 #define AAC_MULTIGRAPH_H
+
+using namespace std;
 
 class Multigraph {
     // Number of vertices
@@ -21,13 +25,44 @@ class Multigraph {
     // Methods
     int getSize(); // Get basic multigraph size
 
+    int getSubsetSize(const vector<int>& vertices);
+
+    int getEdgeWeight(vector<int> vertices);
+
     public:
+
+        vector<int> maxClique;
+
+        vector<int> maxCliqueApproximation;
+
         // Constructor
         explicit Multigraph(int _verticesNo);
 
         // Multigraph generateGraphFromFile(std::string _filePath);
 
-        static Multigraph createAssociationGraph(Multigraph multigraph1, Multigraph multigraph2);
+        static Multigraph createAssociationGraph(const Multigraph& multigraph1, const Multigraph& multigraph2);
+
+        // find maximum clique for a graph - exact solution, exponential time
+        void maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices);
+
+        // find maximum clique for a graph - approximation, polynomial time
+        void maximumCliqueApproximation();
+
+        // find maximum common subgraph of two graphs
+        static Multigraph maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2);
+
+        bool isSubset(vector<int> potentialSubset, vector<int> fullSet);
+
+        int getVertexDegree(int vertex);
+        // find neighbours of some vertex in the graph
+        vector<int> findNeighbours(int vertex);
+        
+        // return all vertices
+        vector<int> verticesInGraph();
+
+        void printClique();
+
+        void printAdjacencyGraph();
 
         //set entry of the adjacency matrix
 
