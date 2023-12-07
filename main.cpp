@@ -6,10 +6,16 @@
 #include <list>
 #include <iostream> // Include iostream for console output
 #include <chrono>
+#include <windows.h>
+#include <unistd.h>
 using namespace std::chrono;
 
 int main() {
-    std::string filePath = "./multigraphs/graph25.txt"; // Hardcoded file path
+
+    cout << "Enter the name of the file containing the multigraphs (file has to be in the same directory as the .exe file)" << endl;
+    string fileName;
+    cin >> fileName;
+    std::string filePath = fileName; // Hardcoded file path
 
     MultigraphReader reader; // Create an instance of MultigraphReader
 
@@ -83,7 +89,7 @@ int main() {
     cout << "----------METRIC-----------" << endl;
 
     MultigraphMetricService mms = MultigraphMetricService();
-
+    cout << "Exact algorithm..." << endl;
     start = high_resolution_clock::now();
     Multigraph multigraph1 = multigraphs.front();
     multigraphs.pop_front();
@@ -95,5 +101,18 @@ int main() {
          << duration.count() << " microseconds"
          << endl;
 
+    cout << "Approximation algorithm..." << endl;
+    start = high_resolution_clock::now();
+    mms.calculateGraphEditDistanceApproximation(multigraph1, multigraph2);
+    stop = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(stop - start);
+    cout << "[Graph Edit Distance Algorithm Approximation] Time taken: "
+         << duration.count() << " microseconds"
+         << endl;
+    
+    sleep(2);
+    cout << "Press key to continue..." << endl;
+    getchar();
+    getchar();
     return EXIT_SUCCESS;
 }
