@@ -98,6 +98,7 @@ int MultigraphMetricService::calculateGraphEditDistanceApproximation(Multigraph 
 
         for(int i = 0; i < smallerMultigraph.getVerticesNo(); i++) {
             for(int j = 0; j < smallerMultigraph.getVerticesNo(); j++) {
+                std::cout << smallerMultigraph.getVertex(vertexIndex[i], vertexIndex[j]) << " ";
                 graphEditDistanceLocal += abs(smallerMultigraph.getVertex(vertexIndex[i],vertexIndex[j]) - biggerMultigraph.getVertex(i,j));
             }
             std::cout << std::endl;
