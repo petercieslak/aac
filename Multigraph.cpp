@@ -41,7 +41,7 @@ int Multigraph::getSubsetSize(const vector<int>& vertices) {
         }
     }
 
-    return verticesNo + noOfEdges;
+    return vertices.size() + noOfEdges;
 }
 
 /*
@@ -219,11 +219,12 @@ void Multigraph::printClique(){
         }
         cout<<endl;
     }
+    cout << "Size: " << getSubsetSize(maxClique) << endl;
 
     cout << "-------------------------------------" << endl;
 
     sort(maxCliqueApproximation.begin(), maxCliqueApproximation.end());
-    cout<<"Maximum clique aprox:" <<endl;
+    cout<<"Maximum clique approximation:" <<endl;
     cout << "  ";
     for(int v1: maxCliqueApproximation) {
         cout<<v1<<" ";
@@ -237,13 +238,14 @@ void Multigraph::printClique(){
         }
         cout<<endl;
     }
+    cout << "Size: " << getSubsetSize(maxCliqueApproximation) << endl;
     cout << endl;
 }
 
-void Multigraph::printAdjacencyGraph(){
-    cout<<"Adjacency graph:" <<endl;
+void Multigraph::printAdjacencyMatrix(){
+    cout << "Adjacency matrix of a graph:" << endl;
     cout << "  ";
-    for(int i=0; i<verticesNo; i++) {
+    for (int i=0; i<verticesNo; i++) {
         cout << i << " ";
     }
     cout << endl;
@@ -254,6 +256,7 @@ void Multigraph::printAdjacencyGraph(){
         }
         cout << endl;
     }
+    cout << "Size: " << getSize() << endl;
     cout << endl;
 }
 

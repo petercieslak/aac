@@ -62,7 +62,7 @@ class Multigraph {
 
         void printClique();
 
-        void printAdjacencyGraph();
+        void printAdjacencyMatrix();
 
         //set entry of the adjacency matrix
 
