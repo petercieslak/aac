@@ -29,28 +29,18 @@ int MultigraphMetricService::calculateGraphEditDistance(Multigraph multigraph1, 
     }
 
     do {
-
-        for(int i = 0; i < 3; i++)
-            std::cout << vertexIndex[i] << " ";
-        
-        std::cout << "\n********* \n" << std::endl;
-
         for(int i = 0; i < smallerMultigraph.getVerticesNo(); i++) {
             for(int j = 0; j < smallerMultigraph.getVerticesNo(); j++) {
-                std::cout << smallerMultigraph.getVertex(vertexIndex[i], vertexIndex[j]) << " ";
                 graphEditDistanceLocal += abs(smallerMultigraph.getVertex(vertexIndex[i],vertexIndex[j]) - biggerMultigraph.getVertex(i,j));
             }
-           std::cout << std::endl;
         }
 
         graphEditDistanceLocal += sizeDifference;
         if(graphEditDistanceLocal < graphEditDistance)
             graphEditDistance = graphEditDistanceLocal;
-        std::cout << std::endl;
 
-        std::cout << "Local graph edit distance: " << graphEditDistanceLocal << std::endl;
         graphEditDistanceLocal = 0;
-    } while (std::next_permutation(vertexIndex, vertexIndex + 3));
+    } while (std::next_permutation(vertexIndex, vertexIndex + smallerMultigraph.getVerticesNo()));
 
     std::cout << "Graph edit distance: " << graphEditDistance << std::endl;
     std::cout << std::endl;
@@ -91,25 +81,16 @@ int MultigraphMetricService::calculateGraphEditDistanceApproximation(Multigraph 
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::shuffle(vertexIndex, vertexIndex + smallerMultigraph.getVerticesNo(), std::default_random_engine());
 
-        for(int i = 0; i < 3; i++)
-            std::cout << vertexIndex[i] << " ";
-        
-        std::cout << "\n********* \n" << std::endl;
-
         for(int i = 0; i < smallerMultigraph.getVerticesNo(); i++) {
             for(int j = 0; j < smallerMultigraph.getVerticesNo(); j++) {
-                std::cout << smallerMultigraph.getVertex(vertexIndex[i], vertexIndex[j]) << " ";
                 graphEditDistanceLocal += abs(smallerMultigraph.getVertex(vertexIndex[i],vertexIndex[j]) - biggerMultigraph.getVertex(i,j));
             }
-            std::cout << std::endl;
         }
 
         graphEditDistanceLocal += sizeDifference;
         if(graphEditDistanceLocal < graphEditDistance)
             graphEditDistance = graphEditDistanceLocal;
-        std::cout << std::endl;
 
-        std::cout << "Local graph edit distance: " << graphEditDistanceLocal << std::endl;
         graphEditDistanceLocal = 0;
     }
 

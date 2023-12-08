@@ -6,8 +6,6 @@
 #include <list>
 #include <iostream> // Include iostream for console output
 #include <chrono>
-//#include <windows.h>
-#include <unistd.h>
 using namespace std::chrono;
 
 int main() {
@@ -16,7 +14,7 @@ int main() {
     MultigraphReader reader;
 
     do {
-        cout << "Enter the name of the file containing the multigraphs (file has to be in the same directory as the .exe file)" << endl;
+        cout << "Enter the absolute path to the file containing the multigraphs" << endl;
         string fileName;
         cin >> fileName;
         filePath = fileName; // Hardcoded file path
@@ -126,7 +124,6 @@ int main() {
          << duration.count() << " microseconds"
          << endl;
 
-    sleep(2);
     cout << "Press key to continue..." << endl;
     getchar();
     getchar();
