@@ -81,11 +81,18 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
     for (int i = 0; i < V1; i++) {
         for (int j = 0; j < V2; j++) {
             for (int x = 0; x < V1; x++) {
-                if (multigraph1.adjMatrix[i][x] >= 1){
+                if (i != x && multigraph1.adjMatrix[i][x] >= 1){
                     for (int y = 0; y < V2; y++){
-                        if (multigraph2.adjMatrix[j][y] >= 1){
+                        if (j != y && multigraph2.adjMatrix[j][y] >= 1){
                             associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
                                     std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                        }
+                    }
+                }
+                else if (i != x && multigraph1.adjMatrix[i][x] == 0){
+                    for (int y = 0; y < V2; y++){
+                        if (j != y && multigraph2.adjMatrix[j][y] == 0){
+                            associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] = 1;
                         }
                     }
                 }
