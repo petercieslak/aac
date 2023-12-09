@@ -16,6 +16,9 @@ std::list<Multigraph> MultigraphReader::readMultigraphsFromFile(std::string file
 
     std::string line = "";
 
+    int numOfGraphs = 0;
+    std::getline(multigraphFile, line);
+    numOfGraphs = stoi(line);
     int rowNum = 0;
     int colNum = 0;
     int graphSize = 0;
