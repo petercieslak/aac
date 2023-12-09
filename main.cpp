@@ -46,21 +46,23 @@ int main() {
         multigraph.maximumCliqueExact(startingClique, multigraph.verticesInGraph());
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(stop - start);
-        cout << "[Maximum Clique Algorithm - Exact] Time taken: "
-            << duration.count() << " microseconds"
-            << endl;
 
         start = high_resolution_clock::now();
         multigraph.maximumCliqueApproximation();
         stop = high_resolution_clock::now();
         duration = duration_cast<microseconds>(stop - start);
-        cout << "[Maximum Clique Algorithm - Approximation] Time taken: "
-             << duration.count() << " microseconds"
-             << endl;
 
         multigraph.printClique();
         multigraphsVectorList.push_back(multigraph);
 
+        cout << "[Maximum Clique Algorithm - Exact] Time taken: "
+            << duration.count() << " microseconds"
+            << endl;
+        cout << "[Maximum Clique Algorithm - Approximation] Time taken: "
+             << duration.count() << " microseconds"
+             << endl;
+
+        cout << endl;
         i += 1;
     }
 
@@ -70,37 +72,45 @@ int main() {
     multigraphsVectorList[0].printAdjacencyMatrix();
     multigraphsVectorList[1].printAdjacencyMatrix();
 
+    cout << endl;
     cout << "Exact algorithm..." << endl;
     auto start = high_resolution_clock::now();
     Multigraph associationGraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
+
+    // cout << "Association graph..." << endl;
+    // associationGraph.printAdjacencyMatrix();
+
+    cout << "Max common subgraph (Maximum Clique of the association graph)..." << endl;
+    associationGraph.printClique();
+
     cout << "[Maximum Common Subgraph Algorithm - Exact] Time taken: "
          << duration.count() << " microseconds"
          << endl;
 
-    cout << "Association graph..." << endl;
-    associationGraph.printAdjacencyMatrix();
-
-    cout << "Max common subgraph (Maximum Clique of the association graph)..." << endl;
-    associationGraph.printClique();
+    cout << endl;
 
     cout << "Approximation algorithm..." << endl;
     start = high_resolution_clock::now();
     Multigraph associationGraphApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
     stop = high_resolution_clock::now();
     duration = duration_cast<microseconds>(stop - start);
-    cout << "[Maximum Common Subgraph Algorithm - Approximation] Time taken: "
-         << duration.count() << " microseconds"
-         << endl;
 
-    cout << "Association graph..." << endl;
-    associationGraphApprox.printAdjacencyMatrix();
+    // cout << "Association graph..." << endl;
+    // associationGraphApprox.printAdjacencyMatrix();
 
     cout << "Max common subgraph (Maximum Clique of the association graph)..." << endl;
     associationGraphApprox.printClique();
 
-    cout << "------------METRIC------------" << endl;
+
+    cout << "[Maximum Common Subgraph Algorithm - Approximation] Time taken: "
+         << duration.count() << " microseconds"
+         << endl;
+
+    cout << endl;
+
+    cout << "------------GRAPH EDIT DISTANCE------------" << endl;
 
     MultigraphMetricService mms = MultigraphMetricService();
     cout << "Exact algorithm..." << endl;
@@ -111,15 +121,21 @@ int main() {
     mms.calculateGraphEditDistance(multigraph1, multigraph2);
     stop = high_resolution_clock::now();
     duration = duration_cast<microseconds>(stop - start);
+
     cout << "[Graph Edit Distance Algorithm - Exact] Time taken: "
          << duration.count() << " microseconds"
          << endl;
+    
+    cout << endl;
 
     cout << "Approximation algorithm..." << endl;
     start = high_resolution_clock::now();
     mms.calculateGraphEditDistanceApproximation(multigraph1, multigraph2);
     stop = high_resolution_clock::now();
     duration = duration_cast<microseconds>(stop - start);
+    
+    cout << endl;
+    
     cout << "[Graph Edit Distance Algorithm - Approximation] Time taken: "
          << duration.count() << " microseconds"
          << endl;

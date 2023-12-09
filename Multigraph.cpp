@@ -218,6 +218,7 @@ void Multigraph::printClique(){
         cout<<v1<<" ";
     }
     cout << endl;
+    cout<<endl;
 
     for(int v1: maxClique){
         cout << v1 << " ";
@@ -226,10 +227,12 @@ void Multigraph::printClique(){
         }
         cout<<endl;
     }
+    cout<<endl;
     cout << "Size: " << getSubsetSize(maxClique) << endl;
+    cout<<endl;
 
     cout << "-------------------------------------" << endl;
-
+    cout<<endl;
     sort(maxCliqueApproximation.begin(), maxCliqueApproximation.end());
     cout<<"Maximum clique approximation:" <<endl;
     cout << "  ";
