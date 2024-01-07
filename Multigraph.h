@@ -60,7 +60,9 @@ class Multigraph {
         // return all vertices
         vector<int> verticesInGraph();
 
-        void printClique();
+        void printCliqueExact();
+
+        void printCliqueApprox();
 
         void printAdjacencyMatrix();
 

@@ -210,14 +210,13 @@ vector<int> Multigraph::verticesInGraph() {
     return result;
 }
 
-void Multigraph::printClique(){
+void Multigraph::printCliqueExact(){
     sort(maxClique.begin(), maxClique.end()); 
-    cout<<"Maximum clique:" <<endl;
+    //cout<<"-> Maximum clique - exact algorithm:" <<endl;
     cout << "  ";
     for(int v1: maxClique) {
         cout<<v1<<" ";
     }
-    cout << endl;
     cout<<endl;
 
     for(int v1: maxClique){
@@ -227,14 +226,12 @@ void Multigraph::printClique(){
         }
         cout<<endl;
     }
-    cout<<endl;
     cout << "Size: " << getSubsetSize(maxClique) << endl;
-    cout<<endl;
+    cout << endl;
+}
 
-    cout << "-------------------------------------" << endl;
-    cout<<endl;
+void Multigraph::printCliqueApprox(){
     sort(maxCliqueApproximation.begin(), maxCliqueApproximation.end());
-    cout<<"Maximum clique approximation:" <<endl;
     cout << "  ";
     for(int v1: maxCliqueApproximation) {
         cout<<v1<<" ";
@@ -253,7 +250,8 @@ void Multigraph::printClique(){
 }
 
 void Multigraph::printAdjacencyMatrix(){
-    cout << "Adjacency matrix of a graph:" << endl;
+    cout << endl;
+    cout << "Adjacency matrix of a multigraph:" << endl;
     cout << "  ";
     for (int i=0; i<verticesNo; i++) {
         cout << i << " ";
@@ -267,7 +265,6 @@ void Multigraph::printAdjacencyMatrix(){
         cout << endl;
     }
     cout << "Size: " << getSize() << endl;
-    cout << endl;
 }
 
 int Multigraph::setAdjMatrixEntry(int rowNum, int colNum, int value) {

@@ -16,7 +16,7 @@ class MultigraphReader {
 
         // Method for reading graphs from file
         
-        std::list<Multigraph> readMultigraphsFromFile(std::string filePath);
+        Multigraph readMultigraphsFromFile(std::string filePath);
 };
 
 #endif //AAC_MULTIGRAPHREAD_H
