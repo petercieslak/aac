@@ -149,20 +149,20 @@ int main() {
                     cout << endl;
                     cout << "-> Maximum common subgraph - exact algorithm" << endl;
                     auto start = high_resolution_clock::now();
-                    Multigraph associationGraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
+                    Multigraph maxCommonSubgraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
 
-                    associationGraph.printCliqueExact();
+                    maxCommonSubgraph.printAdjacencyMatrix();
 
 
                     cout << "-> Maximum common subgraph - approximation algorithm" << endl;
                     start = high_resolution_clock::now();
-                    Multigraph associationGraphApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
+                    Multigraph maxCommonSubgraphApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
                     stop = high_resolution_clock::now();
                     duration = duration_cast<microseconds>(stop - start);
 
-                    associationGraphApprox.printCliqueExact();
+                    maxCommonSubgraphApprox.printAdjacencyMatrix();
 
                     cout << "[Maximum Common Subgraph Algorithm - Exact] Time taken: "
                         << duration.count() << " microseconds"

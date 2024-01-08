@@ -106,13 +106,55 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
 Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
     Multigraph associationGraph = Multigraph::createAssociationGraph(multigraph1, multigraph2);
 
+    cout << "Adjecency matrix of assoc graph" << endl;
+    associationGraph.printAdjacencyMatrix();
+
     vector<int> startingClique;
-    if (exact)
+    if (exact){
         associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
-    else
+
+        return Multigraph::recoverExactGraph(associationGraph.maxClique, multigraph1, multigraph2);
+    }
+    else{
         associationGraph.maximumCliqueApproximation();
 
-    return associationGraph;
+        return Multigraph::recoverExactGraph(associationGraph.maxCliqueApproximation, multigraph1, multigraph2);
+    }
+}
+
+Multigraph Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Multigraph& multigraph1, const Multigraph& multigraph2){
+    int maxCliqueSize = _maxClique.size();
+    Multigraph exactGraph = Multigraph(maxCliqueSize);
+    int g1_1;
+    int g1_2;
+    int g2_1;
+    int g2_2;
+
+    cout << "Max Clique" << endl;
+
+    for (auto item : _maxClique)
+        cout << item << " " << endl;
+
+    for (int i=0; i < maxCliqueSize; i++){// 1st pair
+        g1_1 = _maxClique[i] / multigraph2.verticesNo; // index in 1st graph
+        g2_1 = _maxClique[i] % multigraph2.verticesNo; // index in 2nd graph
+
+        for (int j=0; j < maxCliqueSize; j++){
+            if (j != i) { // omit calculating at the diagonal - we are not allowing any loops
+                // 2nd pair
+                g1_2 = _maxClique[j] / multigraph2.verticesNo; // index in 1st graph
+                g2_2 = _maxClique[j] % multigraph2.verticesNo; // index in 2nd graph
+
+                cout << "Pairs indices: 1st graph: " << g1_1 << " " << g2_1 << endl;
+                cout << "Pairs indices: 2nd graph: " << g1_2 << " " << g2_2 << endl;
+                cout << "Value obtained: " << std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]) << endl;
+
+                exactGraph.adjMatrix[i][j] = std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]);
+            }
+        }
+    }
+
+    return exactGraph;
 }
 
 void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices) {
