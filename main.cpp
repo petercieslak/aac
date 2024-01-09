@@ -180,8 +180,7 @@ int main() {
                     cout << "-> Graph edit distance - exact algorithm" << endl;
                     auto start = high_resolution_clock::now();
                     Multigraph multigraph1 = multigraphs.front();
-                    multigraphs.pop_front();
-                    Multigraph multigraph2 = multigraphs.front();
+                    Multigraph multigraph2 = multigraphs.back();
                     mms.calculateGraphEditDistance(multigraph1, multigraph2);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
