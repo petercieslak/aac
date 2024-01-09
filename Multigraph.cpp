@@ -86,6 +86,8 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
                         if (j != y && multigraph2.adjMatrix[j][y] >= 1){
                             associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
                                     std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                            associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] =
+                                    std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
                         }
                     }
                 }
@@ -93,6 +95,7 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
                     for (int y = 0; y < V2; y++){
                         if (j != y && multigraph2.adjMatrix[j][y] == 0){
                             associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] = 1;
+                            associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] = 1;
                         }
                     }
                 }
@@ -162,7 +165,7 @@ void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjac
         maxClique = currentClique;
     }
 
-    if((currentClique.size() + adjacentVertices.size()) >= maxClique.size()) {
+    if((getSubsetSize(currentClique) + getSubsetSize(adjacentVertices)) >= getSubsetSize(maxClique)) {
         for(int v:adjacentVertices) {
             // delete v from adjacentVertices
             auto it = find(adjacentVertices.begin(), adjacentVertices.end(), v);
