@@ -81,21 +81,23 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
     for (int i = 0; i < V1; i++) {
         for (int j = 0; j < V2; j++) {
             for (int x = 0; x < V1; x++) {
-                if (i != x && multigraph1.adjMatrix[i][x] >= 1){
-                    for (int y = 0; y < V2; y++){
-                        if (j != y && multigraph2.adjMatrix[j][y] >= 1){
-                            associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
-                                    std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
-                            associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] =
-                                    std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                if (i != x){
+                    if(multigraph1.adjMatrix[i][x] >= 1){
+                        for (int y = 0; y < V2; y++){
+                            if (j != y && multigraph2.adjMatrix[j][y] >= 1){
+                                int resolvedValue = std::min(multigraph1.adjMatrix[i][x], multigraph2.adjMatrix[j][y]);
+                                associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] =
+                                        resolvedValue;
+                                associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] =
+                                        resolvedValue;
+                            }
                         }
-                    }
-                }
-                else if (i != x && multigraph1.adjMatrix[i][x] == 0){
-                    for (int y = 0; y < V2; y++){
-                        if (j != y && multigraph2.adjMatrix[j][y] == 0){
-                            associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] = 1;
-                            associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] = 1;
+                    } else if (multigraph1.adjMatrix[i][x] == 0){
+                        for (int y = 0; y < V2; y++){
+                            if (j != y && multigraph2.adjMatrix[j][y] == 0){
+                                associationMultigraph.adjMatrix[i*multigraph2.verticesNo + j][x*multigraph2.verticesNo + y] = 1;
+                                associationMultigraph.adjMatrix[x*multigraph2.verticesNo + y][i*multigraph2.verticesNo + j] = 1;
+                            }
                         }
                     }
                 }
