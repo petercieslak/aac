@@ -8,6 +8,10 @@
 
 using namespace std;
 
+
+/*
+ * Construct a multigraph object given number of vertices.
+ * */
 Multigraph::Multigraph(int _verticesNo)
 {
     verticesNo = _verticesNo;
@@ -33,6 +37,9 @@ int Multigraph::getSize() {
     return verticesNo + noOfEdges;
 }
 
+/*
+ * Get size of a multigraph that consists of a subset of vertices belonging to a multigraph. We define it as the sum of the number of vertices and the number of all edges.
+ * */
 int Multigraph::getSubsetSize(const vector<int>& vertices) {
     int noOfEdges = 0;
     for (auto i : vertices) {
@@ -64,8 +71,8 @@ int Multigraph::getEdgeWeight(vector<int> vertices) {
 }
 
 /*
- * Function to create association graph of two directed multigraphs3x3. We can use this to obtain the maximum common
- * subgraph of two graphs - it will be the maximum clique of this association graph (Durand-Pasari algorithm)
+ * Function to create association graph of two directed multigraphs. We can use this to obtain the maximum common
+ * subgraph of two graphs - it will obtained from the maximum clique of this association graph
  *
  * Parameters:
  *      multigraph1 - first directed multigraph
@@ -111,9 +118,6 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
 Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
     Multigraph associationGraph = Multigraph::createAssociationGraph(multigraph1, multigraph2);
 
-    cout << "Adjecency matrix of assoc graph" << endl;
-    associationGraph.printAdjacencyMatrix();
-
     vector<int> startingClique;
     if (exact){
         associationGraph.maximumCliqueExact(startingClique, associationGraph.verticesInGraph());
@@ -135,11 +139,6 @@ Multigraph Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Mu
     int g2_1;
     int g2_2;
 
-    cout << "Max Clique" << endl;
-
-    for (auto item : _maxClique)
-        cout << item << " " << endl;
-
     for (int i=0; i < maxCliqueSize; i++){// 1st pair
         g1_1 = _maxClique[i] / multigraph2.verticesNo; // index in 1st graph
         g2_1 = _maxClique[i] % multigraph2.verticesNo; // index in 2nd graph
@@ -149,10 +148,6 @@ Multigraph Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Mu
                 // 2nd pair
                 g1_2 = _maxClique[j] / multigraph2.verticesNo; // index in 1st graph
                 g2_2 = _maxClique[j] % multigraph2.verticesNo; // index in 2nd graph
-
-                cout << "Pairs indices: 1st graph: " << g1_1 << " " << g2_1 << endl;
-                cout << "Pairs indices: 2nd graph: " << g1_2 << " " << g2_2 << endl;
-                cout << "Value obtained: " << std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]) << endl;
 
                 exactGraph.adjMatrix[i][j] = std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]);
             }
@@ -259,7 +254,7 @@ vector<int> Multigraph::verticesInGraph() {
 
 void Multigraph::printCliqueExact(){
     sort(maxClique.begin(), maxClique.end()); 
-    //cout<<"-> Maximum clique - exact algorithm:" <<endl;
+
     cout << "  ";
     for(int v1: maxClique) {
         cout<<v1<<" ";
@@ -298,7 +293,6 @@ void Multigraph::printCliqueApprox(){
 
 void Multigraph::printAdjacencyMatrix(){
     cout << endl;
-    cout << "Adjacency matrix of a multigraph:" << endl;
     cout << "  ";
     for (int i=0; i<verticesNo; i++) {
         cout << i << " ";
@@ -312,20 +306,13 @@ void Multigraph::printAdjacencyMatrix(){
         cout << endl;
     }
     cout << "Size: " << getSize() << endl;
+    cout << endl;
 }
 
 int Multigraph::setAdjMatrixEntry(int rowNum, int colNum, int value) {
     adjMatrix[rowNum][colNum] = value;
     // std::cout << "row: " << rowNum << " col: " << colNum << " val: " << value << std::endl;
     return 1;
-}
-
-void Multigraph::print() {
-    for(int i = 0; i < this->verticesNo; i++) {
-        for(int j = 0; j < this->verticesNo; j++) {
-            std::cout << "row: " << i << " col: " << j << " val: " << this->adjMatrix[i][j] << std::endl;
-        }
-    }
 }
 
 int Multigraph::getVerticesNo() {
@@ -363,5 +350,12 @@ int Multigraph::getVertex(int colIndex, int rowIndex) {
     return this->adjMatrix[colIndex][rowIndex];
 }
 
+void printVector(const vector<int>& vector){
+    ::vector<int> newVector(vector);
+    sort(newVector.begin(), newVector.end());
 
+    for (auto item : newVector){
+        cout << item << ", ";
+    }
+}
 

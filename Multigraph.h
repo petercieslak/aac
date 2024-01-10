@@ -38,8 +38,6 @@ class Multigraph {
         // Constructor
         explicit Multigraph(int _verticesNo);
 
-        // Multigraph generateGraphFromFile(std::string _filePath);
-
         static Multigraph createAssociationGraph(const Multigraph& multigraph1, const Multigraph& multigraph2);
 
         // find maximum clique for a graph - exact solution, exponential time
