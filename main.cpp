@@ -49,7 +49,8 @@ int main() {
         while(true) {
             cout << "GRAPH CONSIDERED: " << endl << endl;
             multigraphs.front().printAdjacencyMatrix();
-            cout << "The first row and the leftmost column correspond to the indices of the vertices." << endl << endl;
+            cout << "The first row and the leftmost column correspond to the indices of the vertices." << endl;
+            cout << "If a star/dot appears in the adjacency matrix of a graph, it means that this corresponding vertex was removed from the original graph." << endl << endl;
             cout << endl << "What do you want to do? Choose correct option" << endl;
             cout << "1. Calculate maximum clique" << endl;
             cout << "2. Close program" << endl;
@@ -71,8 +72,10 @@ int main() {
                     cout << "Consists of vertices with indices: ";
                     printVector(multigraphs.front().maxClique);
                     cout << endl << endl;
-                    cout << "Maximum clique as a graph: " << endl;
+                    cout << "Resulting maximum clique: " << endl;
                     multigraphs.front().printCliqueExact();
+                    cout << "Maximum clique in this graph: " << endl;
+                    multigraphs.front().printWithMissingVertices(multigraphs.front().maxClique);
 
                     auto start2 = high_resolution_clock::now();
                     multigraphs.front().maximumCliqueApproximation();
@@ -84,8 +87,10 @@ int main() {
                     cout << "Consists of vertices with indices: ";
                     printVector(multigraphs.front().maxCliqueApproximation);
                     cout << endl << endl;
-                    cout << "Maximum clique as a graph: " << endl;
+                    cout << "Resulting maximum clique: " << endl;
                     multigraphs.front().printCliqueApprox();
+                    cout << "Maximum clique in this graph: " << endl;
+                    multigraphs.front().printWithMissingVertices(multigraphs.front().maxCliqueApproximation);
 
                     cout << "[Maximum Clique Algorithm - Exact] Time taken: "
                         << duration.count() << " microseconds"
@@ -110,7 +115,8 @@ int main() {
             multigraphs.front().printAdjacencyMatrix();
             cout << "Graph 2:" << endl;
             multigraphs.back().printAdjacencyMatrix();
-            cout << "The first row and the leftmost column correspond to the indices of the vertices." << endl << endl;
+            cout << "The first row and the leftmost column correspond to the indices of the vertices." << endl;
+            cout << "If a star/dot appears in the adjacency matrix of a graph, it means that this corresponding vertex was removed from the original graph." << endl << endl;
             cout << "What do you want to do? Choose correct option" << endl;
             cout << "1. Calculate maximum clique" << endl;
             cout << "2. Calculate maximum common subgraph" << endl;
@@ -137,8 +143,10 @@ int main() {
                         cout << "Consists of vertices with indices: ";
                         printVector(multigraph.maxClique);
                         cout << endl << endl;
-                        cout << "Maximum clique as a graph: " << endl;
+                        cout << "Resulting maximum clique: " << endl;
                         multigraph.printCliqueExact();
+                        cout << "Maximum clique in this graph: " << endl;
+                        multigraph.printWithMissingVertices(multigraph.maxClique);
 
                         auto start2 = high_resolution_clock::now();
                         multigraph.maximumCliqueApproximation();
@@ -149,8 +157,10 @@ int main() {
                         cout << "Consists of vertices with indices: ";
                         printVector(multigraph.maxCliqueApproximation);
                         cout << endl << endl;
-                        cout << "Maximum clique as a graph: " << endl;
+                        cout << "Resulting maximum clique: " << endl;
                         multigraph.printCliqueApprox();
+                        cout << "Maximum clique in this graph: " << endl;
+                        multigraph.printWithMissingVertices(multigraph.maxCliqueApproximation);
 
                         cout << "[Maximum Clique Algorithm - Exact] Time taken: "
                             << duration.count() << " microseconds"
@@ -170,21 +180,57 @@ int main() {
 
                     cout << "-> Maximum common subgraph - exact algorithm result" << endl << endl;
                     auto start = high_resolution_clock::now();
-                    Multigraph maxCommonSubgraph = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
+                    tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> subgraphInfo = Multigraph::maximumCommonSubgraph(true, multigraphsVectorList[0], multigraphsVectorList[1]);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
 
+                    Multigraph resultingSubgraph = get<0>(subgraphInfo);
+                    Multigraph subgraphAs1stGraph = get<1>(subgraphInfo);
+                    Multigraph subgraphAs2ndGraph = get<2>(subgraphInfo);
+                    vector<int> verticesIn1stGraph = get<3>(subgraphInfo);
+                    vector<int> verticesIn2ndGraph = get<4>(subgraphInfo);
+
                     cout << "Resulting subgraph: " << endl;
-                    maxCommonSubgraph.printAdjacencyMatrix();
+                    resultingSubgraph.printAdjacencyMatrix();
+
+                    cout << "Corresponding indices of vertices from initial graphs: " << endl;
+                    cout << "Graph 1" << "\t" << "Graph 2" << endl;
+                    for (int i=0; i<resultingSubgraph.getVerticesNo(); i++)
+                        cout << verticesIn1stGraph[i] << "\t\t" << verticesIn2ndGraph[i] << endl;
+                    cout << endl;
+
+                    cout << "Subgraph in 1st graph: " << endl;
+                    subgraphAs1stGraph.printWithMissingVertices(verticesIn1stGraph);
+
+                    cout << "Subgraph in 2nd graph: " << endl;
+                    subgraphAs2ndGraph.printWithMissingVertices(verticesIn2ndGraph);
 
                     cout << "-> Maximum common subgraph - approximation algorithm result" << endl << endl;
                     auto start2 = high_resolution_clock::now();
-                    Multigraph maxCommonSubgraphApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
+                    tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> subgraphInfoApprox = Multigraph::maximumCommonSubgraph(false, multigraphsVectorList[0], multigraphsVectorList[1]);
                     auto stop2 = high_resolution_clock::now();
                     auto duration2 = duration_cast<microseconds>(stop2 - start2);
 
+                    Multigraph resultingSubgraphApprox = get<0>(subgraphInfoApprox);
+                    Multigraph subgraphAs1stGraphApprox = get<1>(subgraphInfoApprox);
+                    Multigraph subgraphAs2ndGraphApprox = get<2>(subgraphInfoApprox);
+                    vector<int> verticesIn1stGraphApprox = get<3>(subgraphInfoApprox);
+                    vector<int> verticesIn2ndGraphApprox = get<4>(subgraphInfoApprox);
+
                     cout << "Resulting subgraph: " << endl;
-                    maxCommonSubgraphApprox.printAdjacencyMatrix();
+                    resultingSubgraphApprox.printAdjacencyMatrix();
+
+                    cout << "Corresponding indices of vertices from initial graphs: " << endl;
+                    cout << "Graph 1" << "\t" << "Graph 2" << endl;
+                    for (int i=0; i<resultingSubgraphApprox.getVerticesNo(); i++)
+                        cout << verticesIn1stGraphApprox[i] << "\t\t" << verticesIn2ndGraphApprox[i] << endl;
+                    cout << endl;
+
+                    cout << "Subgraph in 1st graph: " << endl;
+                    subgraphAs1stGraphApprox.printWithMissingVertices(verticesIn1stGraphApprox);
+
+                    cout << "Subgraph in 2nd graph: " << endl;
+                    subgraphAs2ndGraphApprox.printWithMissingVertices(verticesIn2ndGraphApprox);
 
                     cout << "[Maximum Common Subgraph Algorithm - Exact] Time taken: "
                         << duration.count() << " microseconds"

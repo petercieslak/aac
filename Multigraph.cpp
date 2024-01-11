@@ -115,7 +115,7 @@ Multigraph Multigraph::createAssociationGraph(const Multigraph& multigraph1, con
     return associationMultigraph;
 }
 
-Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
+tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2) {
     Multigraph associationGraph = Multigraph::createAssociationGraph(multigraph1, multigraph2);
 
     vector<int> startingClique;
@@ -131,17 +131,28 @@ Multigraph Multigraph::maximumCommonSubgraph(bool exact, const Multigraph& multi
     }
 }
 
-Multigraph Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Multigraph& multigraph1, const Multigraph& multigraph2){
+tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Multigraph& multigraph1, const Multigraph& multigraph2){
     int maxCliqueSize = _maxClique.size();
     Multigraph exactGraph = Multigraph(maxCliqueSize);
     int g1_1;
     int g1_2;
     int g2_1;
     int g2_2;
+    int commonValue;
 
-    for (int i=0; i < maxCliqueSize; i++){// 1st pair
+    vector<int> verticesIn1stGraph;
+    vector<int> verticesIn2ndGraph;
+
+    Multigraph subgraphAs1stGraph = Multigraph(multigraph1.verticesNo);
+    Multigraph subgraphAs2ndGraph = Multigraph(multigraph2.verticesNo);
+
+    for (int i=0; i < maxCliqueSize; i++){
         g1_1 = _maxClique[i] / multigraph2.verticesNo; // index in 1st graph
         g2_1 = _maxClique[i] % multigraph2.verticesNo; // index in 2nd graph
+
+        // Auxiliary operation for printing out corresponding vertices in graphs
+        verticesIn1stGraph.push_back(g1_1);
+        verticesIn2ndGraph.push_back(g2_1);
 
         for (int j=0; j < maxCliqueSize; j++){
             if (j != i) { // omit calculating at the diagonal - we are not allowing any loops
@@ -149,13 +160,41 @@ Multigraph Multigraph::recoverExactGraph(const vector<int>& _maxClique, const Mu
                 g1_2 = _maxClique[j] / multigraph2.verticesNo; // index in 1st graph
                 g2_2 = _maxClique[j] % multigraph2.verticesNo; // index in 2nd graph
 
-                exactGraph.adjMatrix[i][j] = std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]);
+                commonValue = std::min(multigraph1.adjMatrix[g1_1][g1_2], multigraph2.adjMatrix[g2_1][g2_2]);
+                exactGraph.adjMatrix[i][j] = commonValue;
+
+                // Auxiliary operation for printing out subgraphs in graph
+                subgraphAs1stGraph.adjMatrix[g1_1][g1_2] = commonValue;
+                subgraphAs2ndGraph.adjMatrix[g2_1][g2_2] = commonValue;
             }
         }
     }
 
-    return exactGraph;
+    return std::make_tuple(exactGraph, subgraphAs1stGraph, subgraphAs2ndGraph, verticesIn1stGraph, verticesIn2ndGraph);
 }
+
+void Multigraph::printWithMissingVertices(vector<int> allowedVertices){
+    cout << endl;
+    cout << "  ";
+    for (int i=0; i<verticesNo; i++) {
+        cout << i << " ";
+    }
+    cout << endl;
+    for (int i=0; i<verticesNo; i++){
+        cout << i << " ";
+        for (int j=0; j<verticesNo; j++) {
+            if (std::find(allowedVertices.begin(), allowedVertices.end(), i) == allowedVertices.end() || std::find(allowedVertices.begin(), allowedVertices.end(), j) == allowedVertices.end()){
+                cout << "*" << " ";
+            } else {
+                cout << adjMatrix[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }
+    cout << "Size: " << getSubsetSize(allowedVertices) << endl;
+    cout << endl;
+}
+
 
 void Multigraph::maximumCliqueExact(vector<int> currentClique, vector<int> adjacentVertices) {
     if(getSubsetSize(currentClique) > getSubsetSize(maxClique)) {

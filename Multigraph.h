@@ -47,9 +47,9 @@ class Multigraph {
         void maximumCliqueApproximation();
 
         // find maximum common subgraph of two graphs
-        static Multigraph maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2);
+        static tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> maximumCommonSubgraph(bool exact, const Multigraph& multigraph1, const Multigraph& multigraph2);
 
-        static Multigraph recoverExactGraph(const vector<int>& _maxClique, const Multigraph& multigraph1, const Multigraph& multigraph2);
+        static tuple<Multigraph, Multigraph, Multigraph, vector<int>, vector<int>> recoverExactGraph(const vector<int>& _maxClique, const Multigraph& multigraph1, const Multigraph& multigraph2);
 
         bool isSubset(vector<int> potentialSubset, vector<int> fullSet);
 
@@ -65,6 +65,8 @@ class Multigraph {
         void printCliqueApprox();
 
         void printAdjacencyMatrix();
+
+        void printWithMissingVertices(vector<int> allowedVertices);
 
         //set entry of the adjacency matrix
 
