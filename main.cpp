@@ -24,7 +24,7 @@ int main() {
     for(int i=0; i< files; i++){
         do {
             string message = (i == 0) ? "1st" : "2nd";
-            cout << "Enter the absolute path to the " << message << " file containing the multigraph (one per file)" << endl;
+            cout << "Enter the relative path to the " << message << " file containing the multigraph (one per file)" << endl;
             string fileName;
             cin >> fileName;
             filePath = fileName;
@@ -73,6 +73,10 @@ int main() {
                     cout << "- Vertices in the maximum clique: ";
                     printVector(multigraphs.front().maxClique);
                     cout << endl << endl;
+
+                    cout << "- Resulting maximum clique: " << endl;
+                    multigraphs.front().printCliqueExact();
+
                     cout << "- Maximum clique in this graph: " << endl;
                     multigraphs.front().printWithMissingVertices(multigraphs.front().maxClique);
 
@@ -86,6 +90,10 @@ int main() {
                     cout << "- Vertices in the maximum clique: ";
                     printVector(multigraphs.front().maxCliqueApproximation);
                     cout << endl << endl;
+
+                    cout << "- Resulting maximum clique: " << endl;
+                    multigraphs.front().printCliqueApprox();
+
                     cout << "- Maximum clique in this graph: " << endl;
                     multigraphs.front().printWithMissingVertices(multigraphs.front().maxCliqueApproximation);
 
@@ -159,7 +167,7 @@ int main() {
                         cout << endl << endl;
                         
                         cout << "- Resulting maximum clique: " << endl;
-                        multigraph.printCliqueExact();
+                        multigraph.printCliqueApprox();
 
                         cout << "- Maximum clique in this graph: " << endl;
                         multigraph.printWithMissingVertices(multigraph.maxCliqueApproximation);
