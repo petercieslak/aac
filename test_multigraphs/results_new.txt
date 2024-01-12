@@ -1343,6 +1343,67 @@ What do you want to do? Choose correct option
 2. Calculate maximum common subgraph
 3. Calculate graph edit distance
 4. Close program
+3
+
+=================== GRAPH EDIT DISTANCE ===================
+
+==== GRAPH EDIT DISTANCE - EXACT ALGORITHM
+
+Graph edit distance: 245
+
+==== GRAPH EDIT DISTANCE - APPROXIMATION ALGORITHM ====
+
+Graph edit distance: 355
+
+[Graph Edit Distance Algorithm - Exact] Time taken: 325628310 microseconds
+[Graph Edit Distance Algorithm - Approximation] Time taken: 58 microseconds
+
+============================================================
+
+GRAPHS CONSIDERED:
+
+Graph 1:
+
+  0 1 2 3 4 5 6 7 8 9 10 11
+0 0 0 0 7 6 2 0 4 1 7 8 2
+1 4 0 3 1 1 7 4 8 3 5 3 5
+2 8 2 0 5 5 5 5 3 5 2 3 3
+3 5 5 2 0 7 4 5 2 7 0 0 6
+4 4 5 7 7 0 5 8 6 5 7 7 1
+5 2 5 2 1 8 0 0 7 4 6 8 8
+6 8 0 7 8 4 5 0 3 4 7 6 1
+7 6 4 0 6 4 5 7 0 6 0 2 0
+8 5 5 1 7 3 8 4 2 0 0 4 7
+9 3 7 4 4 6 5 1 5 7 0 0 4
+10 1 3 2 2 6 7 4 2 3 8 0 6
+11 5 5 6 4 3 5 5 0 4 3 6 0
+Size: 570
+
+Graph 2:
+
+  0 1 2 3 4 5 6 7 8 9 10 11
+0 0 3 0 4 8 3 4 7 7 2 6 7
+1 0 0 5 4 8 5 2 1 8 0 0 1
+2 5 1 0 7 7 4 7 3 7 5 5 4
+3 6 0 5 0 3 2 2 2 4 8 8 8
+4 2 3 1 4 0 2 0 7 0 3 3 7
+5 2 0 6 0 0 0 1 7 4 0 4 1
+6 1 0 3 1 1 8 0 6 7 4 1 3
+7 6 4 1 6 0 1 0 0 3 6 8 4
+8 2 1 8 3 5 0 4 1 0 4 5 0
+9 4 5 0 3 6 1 2 3 6 0 4 4
+10 4 7 8 7 1 8 8 5 2 4 0 2
+11 8 1 2 3 5 5 6 2 1 3 5 0
+Size: 499
+
+The first row and the leftmost column correspond to the indices of the vertices.
+If a star/dot appears in the adjacency matrix of a graph, it means that this corresponding vertex was removed from the original graph.
+
+What do you want to do? Choose correct option
+1. Calculate maximum clique
+2. Calculate maximum common subgraph
+3. Calculate graph edit distance
+4. Close program
 4
 
 Process finished with exit code 0
