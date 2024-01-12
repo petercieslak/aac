@@ -393,8 +393,15 @@ void printVector(const vector<int>& vector){
     ::vector<int> newVector(vector);
     sort(newVector.begin(), newVector.end());
 
+    cout << "[ ";
     for (auto item : newVector){
-        cout << item << ", ";
+        if(newVector.back() == item) {
+            cout << item;
+        }
+        else {
+            cout << item << ", ";
+        }
     }
+    cout << " ]";
 }
 

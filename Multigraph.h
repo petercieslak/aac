@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm> 
 #include <numeric>
+#include <tuple>
 #ifndef AAC_MULTIGRAPH_H
 #define AAC_MULTIGRAPH_H
 
